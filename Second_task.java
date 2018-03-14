@@ -10,23 +10,27 @@ public class Second_task {
         System.out.println("Второе задание.");
         Scanner in = new Scanner(System.in);
         int num, write_num=0;
+        int check=0;
+        File file = new File("out.txt");
+        DataInputStream dis = null;
+        DataOutputStream dos = null;
+        byte[] buffer = new byte[32768];
         do {
             System.out.print("Введите число num: ");
             num = in.nextInt();
             if ((num <= 0) || (num % 2 != 0)) System.out.println("Ошибка, введите корректное число!");
         } while ((num <= 0) || (num % 2 != 0));
         do {
-            File file = new File("out.txt");
-            FileWriter writer = new FileWriter(file, false);
-            FileReader fr = new FileReader(file);
-            Scanner sc = new Scanner(fr);
+            dis = new DataInputStream(new FileInputStream(file));
+            dos = new DataOutputStream(new FileOutputStream(file));
             String s = Integer.toString(write_num);
-            writer.write(s);
-            writer.flush();
-            s = sc.nextLine();
-            write_num = Integer.parseInt(s);
+            dos.writeUTF(s);
+            dos.flush();
+            s=dis.readUTF();
+            write_num=Integer.parseInt(s);
             write_num++;
-            writer.close();
+            dis.close();
+            dos.close();
         }while(write_num<=num);
         write_num--;
         System.out.println("Результат: "+write_num);
